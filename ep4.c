@@ -285,7 +285,7 @@ bool ganhou(int*** tab, int n, int lin, int col){
 
     }
 
-    /* Diagonais planos xyz */
+    /* Diagonais xyz */
     if(lin == col && col == alt){
 
         for(i = 0, j = 0, k = 0; i < n; i++, j++, k++)
@@ -348,9 +348,255 @@ bool encheu(int*** tab, int n){
 
 int escolheJogada(int*** tab, int n, int cor, int *lin, int *col){
 
+    bool ofensiva;
+    int i, j, k, i0, j0, k0;
+    int** pontos;
+    int pontMax;
+    int somaAtual;
+    int h;
+    int atual = cor*(-1);
+
+
+    /* Aloca a memória do sistema de pontuações*/
+    pontos = (int**) malloc(n*sizeof(int*));
+    for(i = 0; i < n; i++)
+        pontos[i] = (int*) calloc(n,sizeof(int));
+
+
+
+
+
+    /* Confere se há impossibilidades de jogada */
+    for(i = 0; i < n; i++)
+        for(j = 0; j < n; j++)
+            if(tab[i][j][n - 1])
+                pontos[i][j] = -2;
+
+
+
+    /* Parte principal do código */
+    for(i = 0; i < n; i++){
+
+        for(j = 0; j < n; j++){
+
+            if(!pontos[i][j]){
+
+                /* Mede a altura do elemento */
+                for(h = 0; tab[i][j][h]; h++);
+
+
+
+
+
+                /***********************************************
+                Confere se sua jogada não vai entregar a vitória
+                ***********************************************/
+                if(h < n -1){
+
+                    /* Horizontal */
+                    for(i0 = 0; i0 < n; i0++)
+                        if(tab[i0][j][h + 1] != cor*(-1) && i0 != i)
+                            i0 = n;
+                    
+                    if(i0 == n){
+                        pontos[i][j] = -1;
+                        continue;
+                    }
+
+                    /* Vertical */
+                    for(j0 = 0; j0 < n; j0++)
+                        if(tab[i][j0][h + 1] != cor*(-1) && j0 != j)
+                            j0 = n;
+
+                    if(j0 == n){
+                        pontos[i][j] = -1;
+                        continue;
+                    }
+
+                    /* Diagonal plano xy */
+                    if(i == j){
+
+                        for(i0 = 0, j0 = 0; i0 < n; i0++, j0++)
+                            if(tab[i0][j0][h + 1] != cor*(-1) && i0 != i)
+                                i0 = n;
+
+                        if(i0 == n){
+                            pontos[i][j] = -1;
+                            continue;
+                        }
+
+                    }
+
+                    if(i + j == n - 1){
+
+                        for(i0 = 0, j0 = n - 1; i0 < n; i0++, j0--)
+                            if(tab[i0][j0][h + 1] != cor*(-1) && i0 != i)
+                                i0 = n;
+
+                        if(i0 == n){
+                            pontos[i][j] = -1;
+                            continue;
+                        }
+
+                    }
+
+
+                    /* Diagonal plano xz */
+                    if(i == h + 1){
+
+                        for(i0 = 0, k0 = 0; i0 < n; i0++, k0++)
+                            if(tab[i0][j][k0] != cor*(-1) && i0 != i)
+                                i0 = n;
+
+                        if(i0 == n){
+                            pontos[i][j] = -1;
+                            continue;
+                        }
+
+                    }
+
+                    if(i + h == n - 2){
+
+                        for(i0 = 0, k0 = n - 1; i0 < n; i0++, k0--)
+                            if(tab[i0][j][k0] != cor*(-1) && i0 != i)
+                                i0 = n;
+
+                        if(i0 == n){
+                            pontos[i][j] = -1;
+                            continue;
+                        }
+
+                    }
+                    
+
+                    /* Diagonal plano yz */
+                    if(j == h + 1){
+
+                        for(j0 = 0, k0 = 0; j0 < n; j0++, k0++)
+                            if(tab[i][j0][k0] != cor*(-1) && j0 != j)
+                                j0 = n;
+
+                        if(j0 == n){
+                            pontos[i][j] = -1;
+                            continue;
+                        }
+
+                    }
+
+                    if(i + h == n - 2){
+
+                        for(j0 = 0, k0 = n - 1; j0 < n; j0++, k0--)
+                            if(tab[i][j0][k0] != cor*(-1) && j0 != j)
+                                j0 = n;
+
+                        if(j0 == n){
+                            pontos[i][j] = -1;
+                            continue;
+                        }
+
+                    }
+
+                    /* Diagonais xyz */
+                    if(i == j && j == h + 1){
+
+                        for(i0 = 0, j0 = 0, k0 = 0; j0 < n; i0++, j0++, k0++)
+                            if(tab[i0][j0][k0] != cor*(-1) && j0 != j)
+                                j0 = n;
+
+                        if(j0 == n){
+                            pontos[i][j] = -1;
+                            continue;
+                        }
+
+                    }
+
+                    if(i + j == n - 1 && i + h == n - 2){
+
+                        for(i0 = n - 1, j0 = 0, k0 = 0; j0 < n; i0--, j0++, k0++)
+                            if(tab[i0][j0][k0] != cor*(-1) && j0 != j)
+                                j0 = n;
+
+                        if(j0 == n){
+                            pontos[i][j] = -1;
+                            continue;
+                        }
+
+                    }
+
+                    if(j + i == n - 1 && j + h == n - 2){
+
+                        for(i0 = 0, j0 = n - 1, k0 = 0; j0 < n; i0++, j0--, k0++)
+                            if(tab[i0][j0][k0] != cor*(-1) && i0 != i)
+                                i0 = n;
+
+                        if(i0 == n){
+                            pontos[i][j] = -1;
+                            continue;
+                        }
+
+                    }
+
+                    if(h + i == n - 2 && h + j == n - 2){
+
+                        for(i0 = 0, j0 = 0, k0 = n - 1; j0 < n; i0++, j0++, k0--)
+                            if(tab[i0][j0][k0] != cor*(-1) && i0 != i)
+                                i0 = n;
+
+                        if(i0 == n){
+                            pontos[i][j] = -1;
+                            continue;
+                        }
+
+                    }
+
+                }
+
+
+
+
+
+            }
+
+        }
+
+    }
+
+
+
+
+
+
+
+    /* Pega o valor de maior pontuação e joga suas coordenadas nos ponteiros lin e col*/
+    pontMax = pontos[0][0];
     *lin = 0;
     *col = 0;
-    return 0;
+    for(i = 0; i < n; i++){
 
+        for(j = 0; j < n; j++){
+
+            if(pontos[i][j] > pontMax){
+
+                pontMax = pontos[i][j];
+                *lin = i;
+                *col = j;
+
+            }
+
+        }
+
+    }
+
+
+    /* Libera a memória alocada */
+    for(i = 0; i < n; i++)
+        free(pontos[i]);
+    free(pontos);
+
+
+    if(pontMax == -2)
+        return n;
+
+    return 0;
 
 }
