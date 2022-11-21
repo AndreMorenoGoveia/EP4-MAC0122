@@ -7,10 +7,6 @@
 #define preto 1
 #define azul -1
 
-const int ataque = 60;
-const int defesa = 40;
-const int abertura = 50;
-
 /* Função que printa uma representação do tabuleiro em seu estado */
 void print_tab(int ***tab, int n);
 
@@ -345,8 +341,11 @@ bool encheu(int ***tab, int n)
     return true;
 }
 
-int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
-{
+int escolheJogada(int ***tab, int n, int cor, int *lin, int *col){
+
+    const int ataque = 50;
+    const int defesa = 50;
+    const int abertura = 50;
 
     int i, j, k, i0, j0, k0;
     int **pontos;
@@ -368,42 +367,36 @@ int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
                 pontos[i][j] = -2;
 
     /* Parte principal do código */
-    for (i = 0; i < n; i++)
-    {
+    for (i = 0; i < n; i++){
 
-        for (j = 0; j < n; j++)
-        {
+        for (j = 0; j < n; j++){
 
-            if (!pontos[i][j])
-            {
+            if (!pontos[i][j]){
 
                 /* Mede a altura do elemento */
-                for (h = 0; tab[i][j][h]; h++)
-                    ;
+                for (h = 0; tab[i][j][h]; h++);
 
                 /******************************
                 Pontua para os melhores locais
                 *******************************/
-                if (pontos[i][j] == 0)
-                {
+                if (pontos[i][j] == 0){
 
                     /*** Eixo x ***/
                     meus = 0;
                     dele = 0;
 
-                    for (i0 = 0; i0 < n; i0++)
-                    {
+                    for (i0 = 0; i0 < n; i0++){
 
                         if (tab[i0][j][h] == cor)
                             meus++;
 
                         else if (tab[i0][j][h] == cor * (-1))
                             dele++;
+
                     }
 
                     /* Confirma vitoria */
-                    if (meus == n - 1)
-                    {
+                    if (meus == n - 1){
 
                         *lin = i;
                         *col = j;
@@ -413,43 +406,35 @@ int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
                         free(pontos);
 
                         return 0;
+
                     }
+
 
                     /* Evita derrota */
                     if (dele == n - 1)
-                    {
+                        pontos[i][j] = n * 6000;
 
-                        pontos[i][j] = n * 1400;
-                        continue;
-                    }
 
                     /* Pontos de ataque */
                     if (meus > 0 && dele == 0)
-                    {
-
                         pontos[i][j] += ataque * meus;
-                    }
+
 
                     /* Pontos de defesa */
                     if (dele > 0 && meus == 0)
-                    {
-
                         pontos[i][j] += defesa * dele;
-                    }
+                    
 
                     /* Pontos de aberturas */
                     if (dele == 0 && meus == 0)
-                    {
-
                         pontos[i][j] += abertura * n;
-                    }
+
 
                     /*** Eixo y ***/
                     meus = 0;
                     dele = 0;
 
-                    for (j0 = 0; j0 < n; j0++)
-                    {
+                    for (j0 = 0; j0 < n; j0++){
 
                         if (tab[i][j0][h] == cor)
                             meus++;
@@ -459,8 +444,7 @@ int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
                     }
 
                     /* Confirma vitoria */
-                    if (meus == n - 1)
-                    {
+                    if (meus == n - 1){
 
                         *lin = i;
                         *col = j;
@@ -470,54 +454,48 @@ int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
                         free(pontos);
 
                         return 0;
+
                     }
 
                     /* Evita derrota */
-                    if (dele == n - 1)
-                    {
+                    if (dele == n - 1){
 
-                        pontos[i][j] = n * 1400;
+                        pontos[i][j] = n * 6000;
                         continue;
+
                     }
 
                     /* Pontos de ataque */
                     if (meus > 0 && dele == 0)
-                    {
-
                         pontos[i][j] += ataque * meus;
-                    }
+                    
 
                     /* Pontos de defesa */
                     if (dele > 0 && meus == 0)
-                    {
-
                         pontos[i][j] += defesa * dele;
-                    }
+
 
                     /* Pontos de aberturas */
                     if (dele == 0 && meus == 0)
-                    {
-
                         pontos[i][j] += abertura * n;
-                    }
+
 
                     /*** Eixo z ***/
                     meus = 0;
                     dele = 0;
 
-                    for (k0 = h; k0 >= 0; k0--)
-                    {
+                    for (k0 = h; k0 >= 0; k0--){
 
                         if (tab[i][j][k0] == cor)
                             meus++;
 
                         else if (tab[i][j][k0] == cor * (-1))
                             dele++;
+
                     }
 
                     /* Confirma vitoria */
-                    if (meus == n - 1)
-                    {
+                    if (meus == n - 1){
 
                         *lin = i;
                         *col = j;
@@ -527,58 +505,52 @@ int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
                         free(pontos);
 
                         return 0;
+
                     }
 
                     /* Evita derrota */
-                    if (dele == n - 1)
-                    {
+                    if (dele == n - 1){
 
-                        pontos[i][j] = n * 1400;
+                        pontos[i][j] = n * 6000;
                         continue;
+
                     }
 
                     /* Pontos de ataque */
                     if (meus > 0 && dele == 0)
-                    {
-
                         pontos[i][j] += ataque * meus;
-                    }
+
 
                     /* Pontos de defesa */
                     if (dele > 0 && meus == 0)
-                    {
-
                         pontos[i][j] += defesa * dele;
-                    }
+                    
 
                     /* Pontos de aberturas */
                     if (dele == 0 && meus == 0)
-                    {
-
                         pontos[i][j] += abertura * n;
-                    }
+            
+
 
                     /*** Diagonais plano xy ***/
                     /** Diagonal 1 **/
-                    if (i == j)
-                    {
+                    if (i == j){
 
                         meus = 0;
                         dele = 0;
 
-                        for (i0 = 0, j0 = 0; i0 < n; i0++, j0++)
-                        {
+                        for (i0 = 0, j0 = 0; i0 < n; i0++, j0++){
 
                             if (tab[i0][j0][h] == cor)
                                 meus++;
 
                             else if (tab[i0][j0][h] == cor * (-1))
                                 dele++;
+
                         }
 
                         /* Confirma vitoria */
-                        if (meus == n - 1)
-                        {
+                        if (meus == n - 1){
 
                             *lin = i;
                             *col = j;
@@ -588,58 +560,51 @@ int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
                             free(pontos);
 
                             return 0;
+
                         }
 
                         /* Evita derrota */
-                        if (dele == n - 1)
-                        {
+                        if (dele == n - 1){
 
-                            pontos[i][j] = n * 1400;
+                            pontos[i][j] = n * 6000;
                             continue;
+
                         }
 
                         /* Pontos de ataque */
                         if (meus > 0 && dele == 0)
-                        {
-
                             pontos[i][j] += ataque * meus;
-                        }
+
 
                         /* Pontos de defesa */
                         if (dele > 0 && meus == 0)
-                        {
-
                             pontos[i][j] += defesa * dele;
-                        }
+                        
 
                         /* Pontos de aberturas */
                         if (dele == 0 && meus == 0)
-                        {
-
                             pontos[i][j] += abertura * n;
-                        }
+                    
                     }
 
                     /** Diagonal 2 **/
-                    if (i + j == n - 1)
-                    {
+                    if (i + j == n - 1){
 
                         meus = 0;
                         dele = 0;
 
-                        for (i0 = 0, j0 = n - 1; i0 < n; i0++, j0--)
-                        {
+                        for (i0 = 0, j0 = n - 1; i0 < n; i0++, j0--){
 
                             if (tab[i0][j0][h] == cor)
                                 meus++;
 
                             else if (tab[i0][j0][h] == cor * (-1))
                                 dele++;
+
                         }
 
                         /* Confirma vitoria */
-                        if (meus == n - 1)
-                        {
+                        if (meus == n - 1){
 
                             *lin = i;
                             *col = j;
@@ -649,59 +614,52 @@ int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
                             free(pontos);
 
                             return 0;
+
                         }
 
                         /* Evita derrota */
-                        if (dele == n - 1)
-                        {
+                        if (dele == n - 1){
 
-                            pontos[i][j] = n * 1400;
+                            pontos[i][j] = n * 6000;
                             continue;
+
                         }
 
                         /* Pontos de ataque */
                         if (meus > 0 && dele == 0)
-                        {
-
                             pontos[i][j] += ataque * meus;
-                        }
+                
 
                         /* Pontos de defesa */
                         if (dele > 0 && meus == 0)
-                        {
-
                             pontos[i][j] += defesa * dele;
-                        }
+                        
 
                         /* Pontos de aberturas */
                         if (dele == 0 && meus == 0)
-                        {
-
                             pontos[i][j] += abertura * n;
-                        }
+                        
                     }
 
                     /*** Diagonais plano xz ***/
                     /** Diagonal 1 **/
-                    if (i == h)
-                    {
+                    if (i == h){
 
                         meus = 0;
                         dele = 0;
 
-                        for (i0 = 0, k0 = 0; i0 < n; i0++, k0++)
-                        {
+                        for (i0 = 0, k0 = 0; i0 < n; i0++, k0++){
 
                             if (tab[i0][j][k0] == cor)
                                 meus++;
 
                             else if (tab[i0][j][k0] == cor * (-1))
                                 dele++;
+
                         }
 
                         /* Confirma vitoria */
-                        if (meus == n - 1)
-                        {
+                        if (meus == n - 1){
 
                             *lin = i;
                             *col = j;
@@ -711,58 +669,51 @@ int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
                             free(pontos);
 
                             return 0;
+
                         }
 
                         /* Evita derrota */
-                        if (dele == n - 1)
-                        {
+                        if (dele == n - 1){
 
-                            pontos[i][j] = n * 1400;
+                            pontos[i][j] = n * 6000;
                             continue;
+
                         }
 
                         /* Pontos de ataque */
                         if (meus > 0 && dele == 0)
-                        {
-
                             pontos[i][j] += ataque * meus;
-                        }
+
 
                         /* Pontos de defesa */
                         if (dele > 0 && meus == 0)
-                        {
-
                             pontos[i][j] += defesa * dele;
-                        }
+                        
 
                         /* Pontos de aberturas */
                         if (dele == 0 && meus == 0)
-                        {
-
                             pontos[i][j] += abertura * n;
-                        }
+
                     }
 
                     /** Diagonal 2 **/
-                    if (i + h == n - 1)
-                    {
+                    if (i + h == n - 1){
 
                         meus = 0;
                         dele = 0;
 
-                        for (i0 = 0, k0 = n - 1; i0 < n; i0++, k0--)
-                        {
+                        for (i0 = 0, k0 = n - 1; i0 < n; i0++, k0--){
 
                             if (tab[i0][j][k0] == cor)
                                 meus++;
 
                             else if (tab[i0][j][k0] == cor * (-1))
                                 dele++;
+
                         }
 
                         /* Confirma vitoria */
-                        if (meus == n - 1)
-                        {
+                        if (meus == n - 1){
 
                             *lin = i;
                             *col = j;
@@ -772,59 +723,52 @@ int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
                             free(pontos);
 
                             return 0;
+
                         }
 
                         /* Evita derrota */
-                        if (dele == n - 1)
-                        {
+                        if (dele == n - 1){
 
-                            pontos[i][j] = n * 1400;
+                            pontos[i][j] = n * 6000;
                             continue;
+
                         }
 
                         /* Pontos de ataque */
                         if (meus > 0 && dele == 0)
-                        {
-
                             pontos[i][j] += ataque * meus;
-                        }
+                        
 
                         /* Pontos de defesa */
                         if (dele > 0 && meus == 0)
-                        {
-
                             pontos[i][j] += defesa * dele;
-                        }
+                        
 
                         /* Pontos de aberturas */
                         if (dele == 0 && meus == 0)
-                        {
-
                             pontos[i][j] += abertura * n;
-                        }
+
                     }
 
                     /*** Diagonais plano yz ***/
                     /** Diagonal 1 **/
-                    if (j == h)
-                    {
+                    if (j == h){
 
                         meus = 0;
                         dele = 0;
 
-                        for (j0 = 0, k0 = 0; j0 < n; j0++, k0++)
-                        {
+                        for (j0 = 0, k0 = 0; j0 < n; j0++, k0++){
 
                             if (tab[i][j0][k0] == cor)
                                 meus++;
 
                             else if (tab[i][j0][k0] == cor * (-1))
                                 dele++;
+
                         }
 
                         /* Confirma vitoria */
-                        if (meus == n - 1)
-                        {
+                        if (meus == n - 1){
 
                             *lin = i;
                             *col = j;
@@ -834,58 +778,51 @@ int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
                             free(pontos);
 
                             return 0;
+
                         }
 
                         /* Evita derrota */
-                        if (dele == n - 1)
-                        {
+                        if (dele == n - 1){
 
-                            pontos[i][j] = n * 1400;
+                            pontos[i][j] = n * 6000;
                             continue;
+
                         }
 
                         /* Pontos de ataque */
                         if (meus > 0 && dele == 0)
-                        {
-
                             pontos[i][j] += ataque * meus;
-                        }
+
 
                         /* Pontos de defesa */
                         if (dele > 0 && meus == 0)
-                        {
-
                             pontos[i][j] += defesa * dele;
-                        }
+                        
 
                         /* Pontos de aberturas */
                         if (dele == 0 && meus == 0)
-                        {
-
                             pontos[i][j] += abertura * n;
-                        }
+                        
                     }
 
                     /** Diagonal 2 **/
-                    if (j + h == n - 1)
-                    {
+                    if (j + h == n - 1){
 
                         meus = 0;
                         dele = 0;
 
-                        for (j0 = 0, k0 = n - 1; j0 < n; j0++, k0--)
-                        {
+                        for (j0 = 0, k0 = n - 1; j0 < n; j0++, k0--){
 
                             if (tab[i][j0][k0] == cor)
                                 meus++;
 
                             else if (tab[i][j0][k0] == cor * (-1))
                                 dele++;
+
                         }
 
                         /* Confirma vitoria */
-                        if (meus == n - 1)
-                        {
+                        if (meus == n - 1){
 
                             *lin = i;
                             *col = j;
@@ -895,59 +832,52 @@ int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
                             free(pontos);
 
                             return 0;
+
                         }
 
                         /* Evita derrota */
-                        if (dele == n - 1)
-                        {
+                        if (dele == n - 1){
 
-                            pontos[i][j] = n * 1400;
+                            pontos[i][j] = n * 6000;
                             continue;
+
                         }
 
                         /* Pontos de ataque */
                         if (meus > 0 && dele == 0)
-                        {
-
                             pontos[i][j] += ataque * meus;
-                        }
+                        
 
                         /* Pontos de defesa */
                         if (dele > 0 && meus == 0)
-                        {
-
                             pontos[i][j] += defesa * dele;
-                        }
+                        
 
                         /* Pontos de aberturas */
                         if (dele == 0 && meus == 0)
-                        {
-
                             pontos[i][j] += abertura * n;
-                        }
+                        
                     }
 
                     /*** Diagonais xyz ***/
                     /** Diagonal 1 **/
-                    if (i == j && j == h)
-                    {
+                    if (i == j && j == h){
 
                         meus = 0;
                         dele = 0;
 
-                        for (i0 = 0, j0 = 0, k0 = 0; j0 < n; i0++, j0++, k0++)
-                        {
+                        for (i0 = 0, j0 = 0, k0 = 0; j0 < n; i0++, j0++, k0++){
 
                             if (tab[i0][j0][k0] == cor)
                                 meus++;
 
                             else if (tab[i0][j0][k0] == cor * (-1))
                                 dele++;
+
                         }
 
                         /* Confirma vitoria */
-                        if (meus == n - 1)
-                        {
+                        if (meus == n - 1){
 
                             *lin = i;
                             *col = j;
@@ -957,58 +887,52 @@ int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
                             free(pontos);
 
                             return 0;
+
                         }
 
                         /* Evita derrota */
-                        if (dele == n - 1)
-                        {
+                        if (dele == n - 1){
 
-                            pontos[i][j] = n * 1400;
+                            pontos[i][j] = n * 6000;
                             continue;
+
                         }
+
 
                         /* Pontos de ataque */
                         if (meus > 0 && dele == 0)
-                        {
-
                             pontos[i][j] += ataque * meus;
-                        }
+                        
 
                         /* Pontos de defesa */
                         if (dele > 0 && meus == 0)
-                        {
-
                             pontos[i][j] += defesa * dele;
-                        }
+                        
 
                         /* Pontos de aberturas */
                         if (dele == 0 && meus == 0)
-                        {
-
                             pontos[i][j] += abertura * n;
-                        }
+
                     }
 
                     /** Diagonal 2 **/
-                    if (i + j == n - 1 && i + h == n - 1)
-                    {
+                    if (i + j == n - 1 && i + h == n - 1){
 
                         meus = 0;
                         dele = 0;
 
-                        for (i0 = n - 1, j0 = 0, k0 = 0; j0 < n; i0--, j0++, k0++)
-                        {
+                        for (i0 = n - 1, j0 = 0, k0 = 0; j0 < n; i0--, j0++, k0++){
 
                             if (tab[i0][j0][k0] == cor)
                                 meus++;
 
                             else if (tab[i0][j0][k0] == cor * (-1))
                                 dele++;
+
                         }
 
                         /* Confirma vitoria */
-                        if (meus == n - 1)
-                        {
+                        if (meus == n - 1){
 
                             *lin = i;
                             *col = j;
@@ -1018,58 +942,51 @@ int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
                             free(pontos);
 
                             return 0;
+
                         }
 
                         /* Evita derrota */
-                        if (dele == n - 1)
-                        {
+                        if (dele == n - 1){
 
-                            pontos[i][j] = n * 1400;
+                            pontos[i][j] = n * 6000;
                             continue;
+
                         }
 
                         /* Pontos de ataque */
                         if (meus > 0 && dele == 0)
-                        {
-
                             pontos[i][j] += ataque * meus;
-                        }
+                        
 
                         /* Pontos de defesa */
                         if (dele > 0 && meus == 0)
-                        {
-
                             pontos[i][j] += defesa * dele;
-                        }
+
 
                         /* Pontos de aberturas */
                         if (dele == 0 && meus == 0)
-                        {
-
                             pontos[i][j] += abertura * n;
-                        }
+                        
                     }
 
                     /** Diagonal 3 **/
-                    if (j + i == n - 1 && j + h == n - 1)
-                    {
+                    if (j + i == n - 1 && j + h == n - 1){
 
                         meus = 0;
                         dele = 0;
 
-                        for (i0 = 0, j0 = n - 1, k0 = 0; i0 < n; i0++, j0--, k0++)
-                        {
+                        for (i0 = 0, j0 = n - 1, k0 = 0; i0 < n; i0++, j0--, k0++){
 
                             if (tab[i0][j0][k0] == cor)
                                 meus++;
 
                             else if (tab[i0][j0][k0] == cor * (-1))
                                 dele++;
+
                         }
 
                         /* Confirma vitoria */
-                        if (meus == n - 1)
-                        {
+                        if (meus == n - 1){
 
                             *lin = i;
                             *col = j;
@@ -1079,58 +996,51 @@ int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
                             free(pontos);
 
                             return 0;
+
                         }
 
                         /* Evita derrota */
-                        if (dele == n - 1)
-                        {
+                        if (dele == n - 1){
 
-                            pontos[i][j] = n * 1400;
+                            pontos[i][j] = n * 6000;
                             continue;
+
                         }
 
                         /* Pontos de ataque */
                         if (meus > 0 && dele == 0)
-                        {
-
                             pontos[i][j] += ataque * meus;
-                        }
+                        
 
                         /* Pontos de defesa */
                         if (dele > 0 && meus == 0)
-                        {
-
                             pontos[i][j] += defesa * dele;
-                        }
+                        
 
                         /* Pontos de aberturas */
                         if (dele == 0 && meus == 0)
-                        {
-
                             pontos[i][j] += abertura * n;
-                        }
+                        
                     }
 
                     /** Diagonal 4 **/
-                    if (h + i == n - 1 && h + j == n - 1)
-                    {
+                    if (h + i == n - 1 && h + j == n - 1){
 
                         meus = 0;
                         dele = 0;
 
-                        for (i0 = 0, j0 = 0, k0 = n - 1; i0 < n; i0++, j0++, k0--)
-                        {
+                        for (i0 = 0, j0 = 0, k0 = n - 1; i0 < n; i0++, j0++, k0--){
 
                             if (tab[i0][j0][k0] == cor)
                                 meus++;
 
                             else if (tab[i0][j0][k0] == cor * (-1))
                                 dele++;
+
                         }
 
                         /* Confirma vitoria */
-                        if (meus == n - 1)
-                        {
+                        if (meus == n - 1){
 
                             *lin = i;
                             *col = j;
@@ -1140,53 +1050,51 @@ int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
                             free(pontos);
 
                             return 0;
+
                         }
 
                         /* Evita derrota */
-                        if (dele == n - 1)
-                        {
+                        if (dele == n - 1){
 
-                            pontos[i][j] = n * 1400;
+                            pontos[i][j] = n * 6000;
                             continue;
+
                         }
 
                         /* Pontos de ataque */
                         if (meus > 0 && dele == 0)
-                        {
-
                             pontos[i][j] += ataque * meus;
-                        }
+                        
 
                         /* Pontos de defesa */
                         if (dele > 0 && meus == 0)
-                        {
-
                             pontos[i][j] += defesa * dele;
-                        }
+                        
 
                         /* Pontos de aberturas */
                         if (dele == 0 && meus == 0)
-                        {
-
                             pontos[i][j] += abertura * n;
-                        }
+                        
                     }
                 }
-            } /***********************************************
-                 Confere se sua jogada não vai entregar a vitória
-                 ***********************************************/
-            if (h < n - 1 && pontos[i][j] < 1400*n)
-            {
+            }
+
+
+            /***********************************************
+            Confere se sua jogada não vai entregar a vitória
+            ***********************************************/
+            if (h < n - 1 && pontos[i][j] < 6000*n && pontos[i][j] > -2){
 
                 /* Horizontal */
                 for (i0 = 0; i0 < n; i0++)
                     if (tab[i0][j][h + 1] != cor * (-1) && i0 != i)
                         i0 = n;
 
-                if (i0 == n)
-                {
+                if (i0 == n){
+
                     pontos[i][j] = -1;
                     continue;
+
                 }
 
                 /* Vertical */
@@ -1194,177 +1102,191 @@ int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
                     if (tab[i][j0][h + 1] != cor * (-1) && j0 != j)
                         j0 = n;
 
-                if (j0 == n)
-                {
+                if (j0 == n){
+        
                     pontos[i][j] = -1;
                     continue;
+
                 }
 
                 /* Diagonal plano xy */
-                if (i == j)
-                {
+                if (i == j){
 
                     for (i0 = 0, j0 = 0; i0 < n; i0++, j0++)
                         if (tab[i0][j0][h + 1] != cor * (-1) && i0 != i)
                             i0 = n;
 
-                    if (i0 == n)
-                    {
+                    if (i0 == n){
+
                         pontos[i][j] = -1;
                         continue;
+
                     }
+
                 }
 
-                if (i + j == n - 1)
-                {
+                if (i + j == n - 1){
 
                     for (i0 = 0, j0 = n - 1; i0 < n; i0++, j0--)
                         if (tab[i0][j0][h + 1] != cor * (-1) && i0 != i)
                             i0 = n;
 
-                    if (i0 == n)
-                    {
+                    if (i0 == n){
+
                         pontos[i][j] = -1;
                         continue;
+
                     }
+
                 }
 
                 /* Diagonal plano xz */
-                if (i == h + 1)
-                {
+                if (i == h + 1){
 
                     for (i0 = 0, k0 = 0; i0 < n; i0++, k0++)
                         if (tab[i0][j][k0] != cor * (-1) && i0 != i)
                             i0 = n;
 
-                    if (i0 == n)
-                    {
+                    if (i0 == n){
+            
                         pontos[i][j] = -1;
                         continue;
+
                     }
+
                 }
 
-                if (i + h == n - 2)
-                {
+                if (i + h == n - 2){
 
                     for (i0 = 0, k0 = n - 1; i0 < n; i0++, k0--)
                         if (tab[i0][j][k0] != cor * (-1) && i0 != i)
                             i0 = n;
 
-                    if (i0 == n)
-                    {
+                    if (i0 == n){
+
                         pontos[i][j] = -1;
                         continue;
+
                     }
+
                 }
 
                 /* Diagonal plano yz */
-                if (j == h + 1)
-                {
+                if (j == h + 1){
 
                     for (j0 = 0, k0 = 0; j0 < n; j0++, k0++)
                         if (tab[i][j0][k0] != cor * (-1) && j0 != j)
                             j0 = n;
 
-                    if (j0 == n)
-                    {
+                    if (j0 == n){
+
                         pontos[i][j] = -1;
                         continue;
+
                     }
+
                 }
 
-                if (i + h == n - 2)
-                {
+                if (i + h == n - 2){
 
                     for (j0 = 0, k0 = n - 1; j0 < n; j0++, k0--)
                         if (tab[i][j0][k0] != cor * (-1) && j0 != j)
                             j0 = n;
 
-                    if (j0 == n)
-                    {
+                    if (j0 == n){
+            
                         pontos[i][j] = -1;
                         continue;
+                    
                     }
+
                 }
 
                 /* Diagonais xyz */
-                if (i == j && j == h + 1)
-                {
+                if (i == j && j == h + 1){
 
                     for (i0 = 0, j0 = 0, k0 = 0; j0 < n; i0++, j0++, k0++)
                         if (tab[i0][j0][k0] != cor * (-1) && j0 != j)
                             j0 = n;
 
-                    if (j0 == n)
-                    {
+                    if (j0 == n){
+
                         pontos[i][j] = -1;
                         continue;
+
                     }
+
                 }
 
-                if (i + j == n - 1 && i + h == n - 2)
-                {
+                if (i + j == n - 1 && i + h == n - 2){
 
                     for (i0 = n - 1, j0 = 0, k0 = 0; j0 < n; i0--, j0++, k0++)
                         if (tab[i0][j0][k0] != cor * (-1) && j0 != j)
                             j0 = n;
 
-                    if (j0 == n)
-                    {
+                    if (j0 == n){
+
                         pontos[i][j] = -1;
                         continue;
+
                     }
+
                 }
 
-                if (j + i == n - 1 && j + h == n - 2)
-                {
+                if (j + i == n - 1 && j + h == n - 2){
 
                     for (i0 = 0, j0 = n - 1, k0 = 0; i0 < n; i0++, j0--, k0++)
                         if (tab[i0][j0][k0] != cor * (-1) && i0 != i)
                             j0 = n;
 
-                    if (i0 == n)
-                    {
+                    if (i0 == n){
+
                         pontos[i][j] = -1;
                         continue;
+
                     }
+
                 }
 
-                if (h + i == n - 2 && h + j == n - 2)
-                {
+                if (h + i == n - 2 && h + j == n - 2){
 
                     for (i0 = 0, j0 = 0, k0 = n - 1; j0 < n; i0++, j0++, k0--)
                         if (tab[i0][j0][k0] != cor * (-1) && i0 != i)
                             j0 = n;
 
-                    if (j0 == n)
-                    {
+                    if (j0 == n){
+
                         pontos[i][j] = -1;
                         continue;
+
                     }
+
                 }
+
             }
+
         }
+
     }
 
     /* Pega o valor de maior pontuação e joga suas coordenadas nos ponteiros lin e col*/
     pontMax = pontos[0][0];
     *lin = 0;
     *col = 0;
-    for (i = 0; i < n; i++)
-    {
+    for (i = 0; i < n; i++){
 
-        for (j = 0; j < n; j++)
-        {
+        for (j = 0; j < n; j++){
 
-            if (pontos[i][j] > pontMax)
-            {
+            if (pontos[i][j] > pontMax){
 
                 pontMax = pontos[i][j];
                 *lin = i;
                 *col = j;
+
             }
+
         }
+
     }
 
     /* Libera a memória alocada */
@@ -1376,4 +1298,5 @@ int escolheJogada(int ***tab, int n, int cor, int *lin, int *col)
         return n;
 
     return 0;
+
 }
